@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "sys_user")
+@Table(name="sys_user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -19,23 +19,14 @@ public class User implements Serializable {
     private String password;
     private String sex;
     private String image;
-    private BigDecimal longitude;//经度
-    private BigDecimal latitude;//纬度
-    private String towncode;
-    private String countycode;
-    private Date lastTime;//最近上传位置时间
+
 
     @Transient
     private String imageURL;
     private String idCard;   //  身份证号
     private String emailAddr;     //邮箱地址
     private String phoneNum;   //  手机号码
-    @Transient
-    private Integer mainOrg;// 主职组织
-    @Transient
-    private String orgPath;// 组织路径
-    @Transient
-    private String orgName; //所负责组织
+
     @Transient
     private Integer roleId; // 主要角色ID
     private String roleCode; // 主要角色
@@ -73,9 +64,7 @@ public class User implements Serializable {
         this.imageURL = user.getImageURL();
         this.idCard = user.getIdCard();
         this.phoneNum = user.getPhoneNum();
-        this.mainOrg = user.getMainOrg();
         this.majorRegion = user.getMajorRegion();
-        this.orgName = user.getOrgName();
         this.roleCode = user.getRoleCode();
         this.roleId = user.getRoleId();
         this.status = user.getStatus();
@@ -88,260 +77,225 @@ public class User implements Serializable {
         this.emailAddr = user.getEmailAddr();
     }
 
-    public BigDecimal getLongitude() {
-        return longitude;
-    }
 
-    public void setLongitude(BigDecimal longitude) {
-        this.longitude = longitude;
-    }
-
-    public BigDecimal getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(BigDecimal latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getTowncode() {
-        return towncode;
-    }
-
-    public void setTowncode(String towncode) {
-        this.towncode = towncode;
-    }
-
-    public String getCountycode() {
-        return countycode;
-    }
-
-    public void setCountycode(String countycode) {
-        this.countycode = countycode;
-    }
-
-    public Date getLastTime() {
-        return lastTime;
-    }
-
-    public void setLastTime(Date lastTime) {
-        this.lastTime = lastTime;
-    }
-
-    public String getEmailAddr() {
-        return emailAddr;
-    }
-
-    public void setEmailAddr(String emailAddr) {
-        this.emailAddr = emailAddr;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public User setId(Integer id) {
         this.id = id;
+        return this;
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
+    public User setUserName(String userName) {
         this.userName = userName;
+        return this;
     }
 
     public String getRealName() {
         return realName;
     }
 
-    public void setRealName(String realName) {
+    public User setRealName(String realName) {
         this.realName = realName;
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
-
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(Integer updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getUpdateName() {
-        return updateName;
-    }
-
-    public void setUpdateName(String updateName) {
-        this.updateName = updateName;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-
-    public Integer getCanUpdate() {
-        return canUpdate;
-    }
-
-    public void setCanUpdate(Integer canUpdate) {
-        this.canUpdate = canUpdate;
-    }
-
-    public Integer getCanDelete() {
-        return canDelete;
-    }
-
-    public void setCanDelete(Integer canDelete) {
-        this.canDelete = canDelete;
+        return this;
     }
 
     public String getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public User setSex(String sex) {
         this.sex = sex;
+        return this;
     }
 
     public String getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public User setImage(String image) {
         this.image = image;
+        return this;
     }
+
 
     public String getImageURL() {
         return imageURL;
     }
 
-    public void setImageURL(String imageURL) {
+    public User setImageURL(String imageURL) {
         this.imageURL = imageURL;
+        return this;
     }
 
-    public String getOrgName() {
-        return orgName;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public User setIdCard(String idCard) {
+        this.idCard = idCard;
+        return this;
+    }
+
+    public String getEmailAddr() {
+        return emailAddr;
+    }
+
+    public User setEmailAddr(String emailAddr) {
+        this.emailAddr = emailAddr;
+        return this;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public User setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+        return this;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public User setRoleId(Integer roleId) {
+        this.roleId = roleId;
+        return this;
     }
 
     public String getRoleCode() {
         return roleCode;
     }
 
-    public void setRoleCode(String roleCode) {
+    public User setRoleCode(String roleCode) {
         this.roleCode = roleCode;
+        return this;
     }
 
     public String getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(String roleName) {
+    public User setRoleName(String roleName) {
         this.roleName = roleName;
-    }
-
-    public String getPushId() {
-        return pushId;
-    }
-
-    public void setPushId(String pushId) {
-        this.pushId = pushId;
-    }
-
-    public Integer getMainOrg() {
-        return mainOrg;
-    }
-
-    public void setMainOrg(Integer mainOrg) {
-        this.mainOrg = mainOrg;
-    }
-
-    public String getOrgPath() {
-        return orgPath;
-    }
-
-    public void setOrgPath(String orgPath) {
-        this.orgPath = orgPath;
+        return this;
     }
 
     public String getMajorRegion() {
         return majorRegion;
     }
 
-    public void setMajorRegion(String majorRegion) {
+    public User setMajorRegion(String majorRegion) {
         this.majorRegion = majorRegion;
+        return this;
     }
 
     public String getAreas() {
         return areas;
     }
 
-    public void setAreas(String areas) {
+    public User setAreas(String areas) {
         this.areas = areas;
+        return this;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public User setStatus(Integer status) {
+        this.status = status;
+        return this;
+    }
+
+    public Integer getUpdateBy() {
+        return updateBy;
+    }
+
+    public User setUpdateBy(Integer updateBy) {
+        this.updateBy = updateBy;
+        return this;
+    }
+
+    public String getPushId() {
+        return pushId;
+    }
+
+    public User setPushId(String pushId) {
+        this.pushId = pushId;
+        return this;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public User setUpdateName(String updateName) {
+        this.updateName = updateName;
+        return this;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public User setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+        return this;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public User setRemark(String remark) {
+        this.remark = remark;
+        return this;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public User setRoles(List<Role> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public Integer getCanUpdate() {
+        return canUpdate;
+    }
+
+    public User setCanUpdate(Integer canUpdate) {
+        this.canUpdate = canUpdate;
+        return this;
+    }
+
+    public Integer getCanDelete() {
+        return canDelete;
+    }
+
+    public User setCanDelete(Integer canDelete) {
+        this.canDelete = canDelete;
+        return this;
     }
 }

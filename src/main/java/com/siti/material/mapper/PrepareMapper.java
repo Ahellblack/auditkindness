@@ -11,8 +11,11 @@ import java.util.List;
 
 public interface PrepareMapper extends Mapper<Prepare> {
 
-    @Select("select * from prepare where is_audit = 0 and is_delete = 0")
-    List<Prepare> getAllUnaudit();
+    @Select("<script>" +
+            "select * from prepare where is_audit = 0 and is_delete = 0 " +
+            "<if test = \"hospitalName!=null and hospitalName!=''\"> where name like '%${hospitalName}' </if>" +
+            "</script>")
+    List<Prepare> getAllUnaudit(@Param("hospitalName") String hospitalName);
 
     @Select("update prepare set is_audit = #{entity.isAudit}, is_delete = #{entity.isDelete} where id = #{entity.id}")
     Integer updateStatus(@Param("entity")Prepare prepare );

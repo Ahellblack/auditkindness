@@ -58,7 +58,7 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
             if (user == null
                     || user.getUserName() == null || "".equals(user.getUserName())
                     || user.getRealName() == null || "".equals(user.getRealName())
-                    || user.getMainOrg() == null || user.getRoleCode() == null || "".equals(user.getRoleCode())) {
+                     || user.getRoleCode() == null || "".equals(user.getRoleCode())) {
                 throw new MyException("信息不全");
             }
             User userTemp = dao.findUserByUserName(user.getUserName());
@@ -318,29 +318,6 @@ public class UserBiz extends BaseBiz<UserMapper, User> {
         dao.updatePushIdByUserNamePassword(pushId, userName);
     }
 
-    public void updateByUser(User user) {
-        if (user.getLongitude() != null && user.getLatitude() != null) {
-            User userTemp = dao.selectByPrimaryKey(LoginCtrl.getLoginUserInfo().getId());
-            //System.out.println(LoginCtrl.getLoginUserInfo().getUserName() + ": lon: " + user.getLongitude() + "; lat: " + user.getLatitude());
-            userTemp.setLastTime(new Date());
-            //double doubleLon = user.getLongitude().doubleValue();
-            //double doublelat = user.getLatitude().doubleValue();
-            //double[] a = GPSUtil.bd09_To_Gcj02(doubleLon, doublelat);
-            //BigDecimal lon = new BigDecimal(a[0]);
-            //BigDecimal lan = new BigDecimal(a[1]);
-            //userTemp.setLongitude(lon.setScale(6, BigDecimal.ROUND_DOWN));
-            //userTemp.setLatitude(lan.setScale(6, BigDecimal.ROUND_DOWN));
-            if (userTemp.getLongitude() != null && userTemp.getLatitude() != null) {
-                String point = "POINT(" + userTemp.getLongitude() + " " + userTemp.getLatitude() + ")";
-                AreaVo areaVo = dao.getRegionalCode(point);
-                if (areaVo != null) {
-                    userTemp.setTowncode(areaVo.getTownCode());
-                    userTemp.setCountycode(areaVo.getCountyCode());
-                }
-            }
-            dao.updateByPrimaryKeySelective(userTemp);
-        }
-    }
 
 
 }

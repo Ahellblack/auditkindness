@@ -4,6 +4,7 @@ import com.siti.common.ReturnResult;
 import com.siti.material.biz.MaterialCheckBiz;
 import com.siti.material.biz.MaterialPublishBiz;
 
+import com.siti.material.po.Prepare;
 import com.siti.material.po.SuppliesPublishCall;
 import com.siti.material.po.SuppliesPublishEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,16 +33,16 @@ public class PrepareController {
     MaterialPublishBiz materialPublishBiz;
 
     @GetMapping("check")
-    public ReturnResult check(){
+    public ReturnResult check(String hosptialName){
         try {
-            Map<String,List<String>> map = materialCheckBiz.materialCheck();
+            Map<String,List<String>> map = materialCheckBiz.materialCheck(hosptialName);
             return new ReturnResult(1,"查询结束",map);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnResult(-1,"异常错误");
         }
     }
-
+/*
     @GetMapping("publish")
     public ReturnResult publish(){
         try {
@@ -51,7 +52,7 @@ public class PrepareController {
             e.printStackTrace();
             return new ReturnResult(-1,"异常错误");
         }
-    }
+    }*/
 
     /**
      * @param id  prepareId
@@ -60,8 +61,12 @@ public class PrepareController {
     @GetMapping("hospitalAudit")
     public ReturnResult publishOne(Integer id,Integer auditType){
         try {
-            SuppliesPublishEntity data = materialPublishBiz.publishOne(id,auditType);
-            return new ReturnResult(1,"查询结束",data);
+            Prepare data = materialPublishBiz.publishOne(id,auditType);
+            if(data==null){
+                return new ReturnResult(0,"审核失败，检查参数",data);
+            }else{
+                return new ReturnResult(1,"审核完成",data);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnResult(-1,"异常错误");

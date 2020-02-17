@@ -39,12 +39,12 @@ public class MaterialPublishBiz {
     @Resource
     PrepareDetailMapper prepareDetailMapper;
 
-    public List<SuppliesPublishEntity> publishAll(){
+    public List<Prepare> publishAll(){
         List<Prepare> list = prepareMapper.getAllNeedShow();
-        List<SuppliesPublishEntity> publishList = new ArrayList<>();
+        List<Prepare> publishList = new ArrayList<>();
 
         for (Prepare entity : list){
-            SuppliesPublishEntity publishEntity = publishOne(entity.getId(),1);
+            Prepare publishEntity = publishOne(entity.getId(),1);
             publishList.add(publishEntity);
         }
 
@@ -52,7 +52,7 @@ public class MaterialPublishBiz {
     }
 
     @Transactional
-    public SuppliesPublishEntity publishOne(int id,Integer auditType){
+    public Prepare publishOne(int id,Integer auditType){
         Prepare Prepare = prepareMapper.getById(id);
 
         try {
@@ -83,13 +83,13 @@ public class MaterialPublishBiz {
 
             }
             else {
-                return null;
+                return Prepare;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return Prepare;
     }
 
     // 更新一条记录的物品详情

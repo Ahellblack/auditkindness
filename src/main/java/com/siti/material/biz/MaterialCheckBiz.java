@@ -23,13 +23,13 @@ public class MaterialCheckBiz {
     @Resource
     PrepareMapper prepareMapper;
 
-    public Map<String,List<String>> materialCheck(){
+    public Map<String,List<String>> materialCheck(String hospitalName){
         Map<String,List<String>> map = new HashMap<>();
         List<String> validList = new ArrayList<>();
         List<String> notValidList = new ArrayList<>();
 
 
-        List<Prepare> list = prepareMapper.getAllUnaudit();
+        List<Prepare> list = prepareMapper.getAllUnaudit(hospitalName);
         for (Prepare entity : list){
             String checkDescr = "";
             boolean entityIsValid = true;
