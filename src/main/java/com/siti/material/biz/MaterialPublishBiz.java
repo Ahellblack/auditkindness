@@ -1,7 +1,9 @@
 package com.siti.material.biz;
 
-import com.siti.material.po.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.siti.material.mapper.*;
+import com.siti.material.po.*;
 import com.siti.material.vo.PrepareVo;
 import com.siti.utils.AESUtil;
 import com.siti.utils.LngLonUtil;
@@ -10,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,50 +42,34 @@ public class MaterialPublishBiz {
     @Resource
     PrepareDetailMapper prepareDetailMapper;
 
-    public List<Prepare> publishAll(){
-        List<Prepare> list = prepareMapper.getAllNeedShow();
-        List<Prepare> publishList = new ArrayList<>();
-
-        for (Prepare entity : list){
-            Prepare publishEntity = publishOne(entity.getId(),1);
-            publishList.add(publishEntity);
-        }
-
-        return publishList;
-    }
 
     @Transactional
-    public Prepare publishOne(int id,Integer auditType){
+    public Prepare publishOne(int id, Integer auditType) {
         Prepare Prepare = prepareMapper.getById(id);
 
         try {
-            if (Prepare != null){
-                if(auditType==-1){
-                    Prepare.setIsAudit(-1);
-                    prepareMapper.updateStatus(Prepare);
-                }
-
+            if (Prepare != null) {
+                    Prepare.setIsAudit(auditType);
+                prepareMapper.updateStatus(Prepare);
                 HospitalEntity hospital = materialToHospital(Prepare);
                 SuppliesPublishEntity suppliesPublish = materialToSuppliesPublish(Prepare);
 
                 // 不存在于hostipal，则新增
-                if (hospitalMapper.getCountByName(Prepare.getName()) < 1){
+                if (hospitalMapper.getCountByName(Prepare.getName()) < 1) {
                     hospitalMapper.insert(hospital);
-                }
-                else {
-                    hospitalMapper.updateByName(hospital,Prepare.getName());
+                } else {
+                    hospitalMapper.updateByName(hospital, Prepare.getName());
                 }
 
                 //  publish表可直接新增
                 suppliesPublishMapper.insert(suppliesPublish);
-                List<SuppliesPublishDetail> detailList =  publishOneDetail(id);  // 更新detail
+                List<SuppliesPublishDetail> detailList = publishOneDetail(id);  // 更新detail
                 List<SuppliesPublishCall> callList = publishOneCall(id); // 更新call
 
                 prepareMapper.updateHasShowStatus(id);  // 发布完成后更新hasShow状态
                 System.out.println("更新" + hospital.toString() + "," + suppliesPublish.toString() + "," + detailList);
 
-            }
-            else {
+            } else {
                 return Prepare;
             }
         } catch (Exception e) {
@@ -96,26 +80,25 @@ public class MaterialPublishBiz {
     }
 
     // 更新一条记录的物品详情
-    public List<SuppliesPublishDetail> publishOneDetail(int materialId){
+    public List<SuppliesPublishDetail> publishOneDetail(int materialId) {
         String hospitalName = prepareMapper.getById(materialId).getName();
         Integer publishId = suppliesPublishMapper.getLastPublishIdByName(hospitalName);
         List<SuppliesPublishDetail> detailList = new ArrayList<>();
 
         List<PrepareDetail> list = prepareDetailMapper.getAllByMaterialId(materialId);
-        for (PrepareDetail entity : list){
+        for (PrepareDetail entity : list) {
             SuppliesPublishDetail publishDetail = new SuppliesPublishDetail();
             publishDetail.setPublishId(publishId);
             publishDetail.setNeedsName(entity.getNeedsName());
             publishDetail.setDescr(entity.getDescr());
 
             // 不存在重复的则插入，否则更新
-            if (null == suppliesPublishDetailMapper.getByParams(publishDetail)){
+            if (null == suppliesPublishDetailMapper.getByParams(publishDetail)) {
                 suppliesPublishDetailMapper.insert(publishDetail);
-                System.out.print("插入"+publishDetail.toString());
-            }
-            else {
+                System.out.print("插入" + publishDetail.toString());
+            } else {
                 suppliesPublishDetailMapper.updateDescr(publishDetail);
-                System.out.print("更新"+publishDetail.toString());
+                System.out.print("更新" + publishDetail.toString());
             }
             System.out.println();
             detailList.add(publishDetail);
@@ -129,31 +112,28 @@ public class MaterialPublishBiz {
         List<SuppliesPublishCall> callList = new ArrayList<>();
 
         List<SuppliesPublishEntity> list = suppliesPublishMapper.getAll();
-        for (SuppliesPublishEntity entity : list){
+        for (SuppliesPublishEntity entity : list) {
             String linkPeopleStr = entity.getLinkPeople() == null ? "" : entity.getLinkPeople();
             String linkTelStr = entity.getLinkTel() == null ? "" : entity.getLinkTel();
 
-            String[] tel = linkTelStr.split(",",5);
-            String[] peo = linkPeopleStr.split(",",5);
-            if (tel[0].equals("")){
+            String[] tel = linkTelStr.split(",", 5);
+            String[] peo = linkPeopleStr.split(",", 5);
+            if (tel[0].equals("")) {
                 continue;
             }
-            for (int i = 0; i < tel.length; i ++){
+            for (int i = 0; i < tel.length; i++) {
                 SuppliesPublishCall publishCall = new SuppliesPublishCall();
 
-                String linkPeople = i >= peo.length ? "联系人" : (peo[i].equals("") ? "联系人": peo[i]);  // 联系人可能比号码少
-                String linkTel = tel[i].replaceAll("[^\\d]+","");
+                String linkPeople = i >= peo.length ? "联系人" : (peo[i].equals("") ? "联系人" : peo[i]);  // 联系人可能比号码少
+                String linkTel = tel[i].replaceAll("[^\\d]+", "");
 
-                if (linkTel.startsWith("1") && linkTel.length()==11){
+                if (linkTel.startsWith("1") && linkTel.length() == 11) {
                     publishCall.setLinktel("86" + linkTel);  // 手机号前加86
-                }
-                else if (linkTel.startsWith("0") && 10 <= linkTel.length() && linkTel.length() <= 12){
-                    publishCall.setLinktel("86" + linkTel.subSequence(1,linkTel.length()-1));  // 固话前去除0再加86
-                }
-                else if (linkTel.startsWith("400")){
+                } else if (linkTel.startsWith("0") && 10 <= linkTel.length() && linkTel.length() <= 12) {
+                    publishCall.setLinktel("86" + linkTel.subSequence(1, linkTel.length() - 1));  // 固话前去除0再加86
+                } else if (linkTel.startsWith("400")) {
                     publishCall.setLinktel("86" + linkTel);  // 400类碘化铅加86
-                }
-                else {
+                } else {
                     publishCall.setLinktel(linkTel);  // 其它类型号码要么错误要么未国际电话，保持不变
                 }
 
@@ -179,37 +159,34 @@ public class MaterialPublishBiz {
 
         List<String> peopleList = new ArrayList<>();
         List<String> telList = new ArrayList<>();
-        String[] peoTel = Prepare.getLinkPeople().split(",",5);
+        String[] peoTel = Prepare.getLinkPeople().split(",", 5);
         for (String s : peoTel) {
             String[] peoTelArray = s.split(":");
             peopleList.add(peoTelArray[0]);
             telList.add(peoTelArray[1]);
         }
-        if(telList.get(0).equals("") || telList.get(0).equals(" ")){
+        if (telList.get(0).equals("") || telList.get(0).equals(" ")) {
             return null;  // 一个联系电话都没有则返回
         }
 
-        for (int i = 0; i < telList.size(); i ++){
+        for (int i = 0; i < telList.size(); i++) {
             SuppliesPublishCall publishCall = new SuppliesPublishCall();
-            String linkPeople = peopleList.size() - 1 < i || peopleList.get(i).equals("") ?"联系人":peopleList.get(i);  // 联系人比联系电话少时，默认为  联系人
-            String linkTel = telList.get(i).replaceAll("[^\\d]+","");
+            String linkPeople = peopleList.size() - 1 < i || peopleList.get(i).equals("") ? "联系人" : peopleList.get(i);  // 联系人比联系电话少时，默认为  联系人
+            String linkTel = telList.get(i).replaceAll("[^\\d]+", "");
 
-            if (linkTel.startsWith("1") && linkTel.length()==11){
+            if (linkTel.startsWith("1") && linkTel.length() == 11) {
                 publishCall.setLinktel("86" + linkTel);  // 手机号前加86
-            }
-            else if (linkTel.startsWith("0") && 10 <= linkTel.length() && linkTel.length() <= 12){
-                publishCall.setLinktel("86" + linkTel.subSequence(1,linkTel.length()-1));  // 固话前去除0再加86
-            }
-            else if (linkTel.startsWith("400")){
+            } else if (linkTel.startsWith("0") && 10 <= linkTel.length() && linkTel.length() <= 12) {
+                publishCall.setLinktel("86" + linkTel.subSequence(1, linkTel.length() - 1));  // 固话前去除0再加86
+            } else if (linkTel.startsWith("400")) {
                 publishCall.setLinktel("86" + linkTel);  // 400类号码加86
-            }
-            else {
+            } else {
                 publishCall.setLinktel(linkTel);  // 其它类型号码要么错误要么为国际电话，保持不变
             }
 
             publishCall.setPublishId(publishId);
             publishCall.setLinkPeople(linkPeople);
-            publishCall.setEnPeople( AESUtil.Encrypt(linkPeople).replaceAll("[\\s*\t\n\r]", ""));
+            publishCall.setEnPeople(AESUtil.Encrypt(linkPeople).replaceAll("[\\s*\t\n\r]", ""));
 
             suppliesPublishCallMapper.insert(publishCall);
             callList.add(publishCall);
@@ -222,11 +199,11 @@ public class MaterialPublishBiz {
     public HospitalEntity materialToHospital(Prepare Prepare) throws Exception {
         HospitalEntity hospital = new HospitalEntity();
 
-        if (!Prepare.getLongitude().isEmpty() && !Prepare.getLatitude().isEmpty()){
+        if (!Prepare.getLongitude().isEmpty() && !Prepare.getLatitude().isEmpty()) {
             double lon = Double.parseDouble(Prepare.getLongitude());
             double lat = Double.parseDouble(Prepare.getLatitude());
 
-            double[] gps = LngLonUtil.bd09_To_Gcj02(lon,lat);
+            double[] gps = LngLonUtil.bd09_To_Gcj02(lon, lat);
 
             String gaodeLon = String.valueOf(gps[0]);
             String gaodeLat = String.valueOf(gps[1]);
@@ -242,25 +219,20 @@ public class MaterialPublishBiz {
         }
 
         // 如此转换的原因是数据库的material和hospital的字段值设定
-        if (Prepare.getMaterialType() == 1){
+        if (Prepare.getMaterialType() == 1) {
             hospital.setIsLack(1);   // 需求方才设置
-            if (Prepare.getType() == 4){
+            if (Prepare.getType() == 4) {
                 hospital.setType(1);  // 定点医院
-            }
-            else if (Prepare.getType() == 5){
+            } else if (Prepare.getType() == 5) {
                 hospital.setType(2);  // 发热门诊
-            }
-            else {
+            } else {
                 hospital.setType(0);  // 普通医疗结构
             }
-        }
-        else if (Prepare.getMaterialType() == 2){
+        } else if (Prepare.getMaterialType() == 2) {
             hospital.setType(3);  // 供给方
-        }
-        else if (Prepare.getMaterialType() == 3){
+        } else if (Prepare.getMaterialType() == 3) {
             hospital.setType(4);  // 社会组织
-        }
-        else {
+        } else {
             hospital.setType(null);  // 错误类型
         }
 
@@ -288,7 +260,7 @@ public class MaterialPublishBiz {
 
         List<String> peopleList = new ArrayList<>();
         List<String> telList = new ArrayList<>();
-        String[] peoTel = Prepare.getLinkPeople().split(",",5);
+        String[] peoTel = Prepare.getLinkPeople().split(",", 5);
         for (String s : peoTel) {
             String[] peoTelArray = s.split(":");
             peopleList.add(peoTelArray[0]);
@@ -297,7 +269,7 @@ public class MaterialPublishBiz {
 
         String linkPeople = String.join(",", peopleList);
         String linkTel = String.join(",", telList);
-        String enLinkPeople =  !linkPeople.isEmpty() ? AESUtil.Encrypt(linkPeople).
+        String enLinkPeople = !linkPeople.isEmpty() ? AESUtil.Encrypt(linkPeople).
                 replaceAll("[\\s*\t\n\r]", "") : null;
         String enLinkTel = !linkTel.isEmpty() ? AESUtil.Encrypt(linkTel).
                 replaceAll("[\\s*\t\n\r]", "") : null;
@@ -314,18 +286,41 @@ public class MaterialPublishBiz {
         return publishEntity;
     }
 
-    public List<PrepareVo> getMaterial(Integer materialType, Integer status, String createTime, String needName) {
-        List<PrepareVo> returnList = new ArrayList<>();
-        List<PrepareVo> preparelist = prepareMapper.getMaterial(materialType,status, createTime,needName);
-        Map<Integer, List<PrepareVo>> collect = preparelist.stream().collect(Collectors.groupingBy(PrepareVo::getId));
-        collect.forEach((k,v)-> {
-            returnList.addAll(v);
-        });
-        returnList.forEach(data->{
+    public PageInfo<PrepareVo> getMaterial(Integer page,Integer pageSize,Integer materialType, Integer status, String createTime, String needName,Integer isAudit,Integer isDelete) {
+        if(isAudit==null){
+            isAudit =0;
+        }
+        if(isDelete==null){
+            isDelete =0;
+        }
+
+        PageHelper.startPage(page, pageSize);
+        List<PrepareVo> preparelist = prepareMapper.getMaterial(materialType, status, createTime,needName,isAudit,isDelete);
+        List<PrepareVo> returnList = preparelist.stream()
+                .collect(Collectors.collectingAndThen(Collectors.toCollection(
+                        // 利用 TreeSet 的排序去重构造函数来达到去重元素的目的
+                        // 根据firstName去重
+                        () -> new TreeSet<>(Comparator.comparing(PrepareVo::getId))), ArrayList::new));
+
+        returnList.forEach(data -> {
             List<PrepareDetail> byMaterialId = prepareMapper.getByMaterialId(data.getId(), needName);
             data.setPrepareDetails(byMaterialId);
         });
+        PageInfo<PrepareVo> pageInfo = new PageInfo<>(returnList);
+        return pageInfo;
+    }
 
-        return returnList;
+    public Integer deleteOne(Integer id) {
+        Prepare Prepare = prepareMapper.getById(id);
+        Integer returnData =0;
+        try {
+            if (Prepare != null) {
+                Prepare.setIsDelete(1);
+                returnData= prepareMapper.updateStatus(Prepare);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnData;
     }
 }

@@ -25,13 +25,26 @@ public class MaterialCheckBiz {
     @Resource
     PrepareMapper prepareMapper;
 
+    public PageInfo<Prepare> getMaterial(Integer page,Integer pageSize,String hospitalName,Integer isAudit,Integer isDelete){
+        if(isAudit==null){
+            isAudit =0;
+        }
+        if(isDelete==null){
+            isDelete =0;
+        }
+        PageHelper.startPage(page, pageSize);
+        List<Prepare> list = prepareMapper.getAllUnAudit(isAudit,isDelete,hospitalName);
+        PageInfo<Prepare> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
     public Map<String,Object> materialCheck(Integer page,Integer pageSize,String hospitalName){
         Map<String,Object> map = new HashMap<>();
         List<Prepare> validList = new ArrayList<>();
         List<Prepare> notValidList = new ArrayList<>();
         PageHelper.startPage(page, pageSize);
 
-        List<Prepare> list = prepareMapper.getAllUnaudit(hospitalName);
+        List<Prepare> list = prepareMapper.getAllUnAudit(0,0,hospitalName);
         for (Prepare entity : list){
             String checkDescr = "";
             boolean entityIsValid = true;
@@ -64,8 +77,8 @@ public class MaterialCheckBiz {
                 validList.add(entity);
             }
             else {
-                entity.setIsDelete(0);
-                entity.setIsAudit(-1);
+                entity.setIsDelete(1);
+                entity.setIsAudit(0);
                 prepareMapper.updateStatus(entity);
                 notValidList.add(entity);
             }

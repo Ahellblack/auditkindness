@@ -1,6 +1,7 @@
 package com.siti.material.ctrl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.siti.common.ReturnResult;
 import com.siti.material.biz.MaterialCheckBiz;
 import com.siti.material.biz.MaterialPublishBiz;
@@ -35,44 +36,55 @@ public class PrepareController {
     MaterialPublishBiz materialPublishBiz;
 
     @GetMapping("getMeterialCheck")
-    public ReturnResult check(Integer page,Integer pageSize,String hosptialName){
+    public ReturnResult check(Integer page,Integer pageSize,String hosptialName,Integer isAudit,Integer isDelete){
         try {
-
-            Map<String,Object> map = materialCheckBiz.materialCheck(page,pageSize,hosptialName);
-            return new ReturnResult(1,"查询结束",map);
+            PageInfo<Prepare> material = materialCheckBiz.getMaterial(page, pageSize, hosptialName, isAudit, isDelete);
+            return new ReturnResult(1,"查询成功",material);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnResult(-1,"异常错误");
         }
     }
 
-    @GetMapping("getMaterial")
-    public ReturnResult getMaterial(Integer materialType,Integer status,String createTime,String needName){
+    @GetMapping("excludeUnValid")
+    public ReturnResult excludeUnValid(Integer page,Integer pageSize,String hosptialName){
         try {
-            List<PrepareVo> material = materialPublishBiz.getMaterial(materialType, status, createTime, needName);
+
+            Map<String, Object> stringObjectMap = materialCheckBiz.materialCheck(page, pageSize, hosptialName);
+            return new ReturnResult(1,"操作完成",stringObjectMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnResult(-1,"异常错误");
+        }
+    }
+
+    /**
+     * @param materialType
+     * @param status
+     * @param createTime
+     * @param needName
+     * @param isAudit
+     * @param isDelete
+     *
+     *
+     * */
+    @GetMapping("getMaterial")
+    public ReturnResult getMaterial(Integer page,Integer pageSize,
+                                    Integer materialType,Integer status,String createTime,String needName,Integer isAudit,Integer isDelete){
+        try {
+            PageInfo<PrepareVo> material = materialPublishBiz.getMaterial(page, pageSize, materialType, status, createTime, needName,isAudit, isDelete);
             return new ReturnResult(1,"查询结束",material);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnResult(-1,"异常错误");
         }
     }
-/*
-    @GetMapping("publish")
-    public ReturnResult publish(){
-        try {
-            List<SuppliesPublishEntity> list = materialPublishBiz.publishAll();
-            return new ReturnResult(1,"查询结束",list);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ReturnResult(-1,"异常错误");
-        }
-    }*/
 
     /**
      * @param id  prepareId
      * @param auditType 审核类型 1通过 -1不通过
      * */
-    @GetMapping("hospitalAudit")
+    @GetMapping("audit")
     public ReturnResult publishOne(Integer id,Integer auditType){
         try {
             Prepare data = materialPublishBiz.publishOne(id,auditType);
@@ -87,6 +99,23 @@ public class PrepareController {
         }
     }
 
+    /**
+     * @param id  prepareId
+     * */
+    @GetMapping("delete")
+    public ReturnResult deleteOne(Integer id){
+        try {
+            Integer data = materialPublishBiz.deleteOne(id);
+            if(data==0){
+                return new ReturnResult(0,"删除失败，检查参数",data);
+            }else{
+                return new ReturnResult(1,"删除成功",data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnResult(-1,"异常错误");
+        }
+    }
 
 
     @GetMapping("convertCall")

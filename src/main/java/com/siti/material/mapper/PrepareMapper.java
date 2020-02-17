@@ -11,11 +11,14 @@ import java.util.List;
 
 public interface PrepareMapper extends Mapper<Prepare> {
 
+    /**
+     * 查询所有未审核且未被删除
+     * */
     @Select("<script>" +
-            "select * from prepare where is_audit = 0 and is_delete = 0 " +
+            "select * from prepare where is_audit = #{isAudit} and is_delete = #{isDelete} " +
             "<if test = \"hospitalName!=null and hospitalName!=''\"> where name like '%${hospitalName}' </if>" +
             "</script>")
-    List<Prepare> getAllUnaudit(@Param("hospitalName") String hospitalName);
+    List<Prepare> getAllUnAudit(@Param("isAudit")Integer isAudit,@Param("isDelete")Integer isDelete,@Param("hospitalName") String hospitalName);
 
     @Select("update prepare set is_audit = #{entity.isAudit}, is_delete = #{entity.isDelete} where id = #{entity.id}")
     Integer updateStatus(@Param("entity")Prepare prepare );
@@ -48,7 +51,8 @@ public interface PrepareMapper extends Mapper<Prepare> {
      * @return
      */
     @Select("<script>" +
-            "      SELECT * FROM `prepare` p left join `prepare_detail` pd on pd.material_id = p.id where 1=1 " +
+            "      SELECT * FROM `prepare` p left join `prepare_detail` pd on pd.material_id = p.id " +
+            "       where is_audit = #{isAudit} and is_delete = #{isDelete} " +
             "       <if test=\" materialType!=null and materialType!=''\">and  p.material_type = #{materialType}</if>" +
             "       <if test=\" status!=null and status!=''\"> and p.status = #{status} </if>" +
             "       <if test=\" createTime!=null and createTime!=''\"> and p.create_time like '%${createTime}%'</if>" +
@@ -58,7 +62,8 @@ public interface PrepareMapper extends Mapper<Prepare> {
             @Result(property = "id", column = "id"),
             @Result(property = "prepareDetails", javaType = List.class, column = "id", many = @Many(select = "com.siti.material.mapper.PrepareMapper.getByMaterialId")),
     })*/
-    List<PrepareVo> getMaterial(@Param("materialType") Integer materialType,@Param("status") Integer status, @Param("createTime")String createTime,@Param("needName") String needName);
+    List<PrepareVo> getMaterial(@Param("materialType") Integer materialType,@Param("status") Integer status, @Param("createTime")String createTime,
+                                @Param("needName") String needName,@Param("isAudit")Integer isAudit, @Param("isDelete")Integer isDelete);
 
     /**
      * 物资表关联

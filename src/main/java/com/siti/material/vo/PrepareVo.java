@@ -12,7 +12,7 @@ public class PrepareVo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;//主键
+	private int id;//主键
 	private Integer materialType;//1需求方，2提供方
 	private String province;//省
 	private String city;//市
@@ -60,11 +60,11 @@ public class PrepareVo {
 		return this;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public PrepareVo setId(Integer id) {
+	public PrepareVo setId(int id) {
 		this.id = id;
 		return this;
 	}
