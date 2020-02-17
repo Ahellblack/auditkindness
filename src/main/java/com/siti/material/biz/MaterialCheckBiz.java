@@ -38,13 +38,12 @@ public class MaterialCheckBiz {
         return pageInfo;
     }
 
-    public Map<String,Object> materialCheck(Integer page,Integer pageSize,String hospitalName){
+    public Map<String,Object> materialCheck(){
         Map<String,Object> map = new HashMap<>();
-        List<Prepare> validList = new ArrayList<>();
-        List<Prepare> notValidList = new ArrayList<>();
-        PageHelper.startPage(page, pageSize);
+        List<String> validList = new ArrayList<>();
+        List<String> notValidList = new ArrayList<>();
 
-        List<Prepare> list = prepareMapper.getAllUnAudit(0,0,hospitalName);
+        List<Prepare> list = prepareMapper.getAllUnAudit(0,0,null);
         for (Prepare entity : list){
             String checkDescr = "";
             boolean entityIsValid = true;
@@ -74,20 +73,18 @@ public class MaterialCheckBiz {
                 entity.setIsDelete(0);
                 entity.setIsAudit(0);
                 prepareMapper.updateStatus(entity);
-                validList.add(entity);
+                validList.add(entity.getName());
             }
             else {
                 entity.setIsDelete(1);
                 entity.setIsAudit(0);
                 prepareMapper.updateStatus(entity);
-                notValidList.add(entity);
+                notValidList.add(entity.getName());
             }
             System.out.println(entity.toString());
         }
-        PageInfo<Prepare> validpageInfo = new PageInfo<>(validList);
-        PageInfo<Prepare> notValidpageInfo = new PageInfo<>(notValidList);
-        map.put("合格组织", validpageInfo);
-        map.put("不合规组织", notValidpageInfo);
+        map.put("合格组织", validList);
+        map.put("不合规组织", notValidList);
         return map;
     }
 

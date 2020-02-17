@@ -47,10 +47,10 @@ public class PrepareController {
     }
 
     @GetMapping("excludeUnValid")
-    public ReturnResult excludeUnValid(Integer page,Integer pageSize,String hosptialName){
+    public ReturnResult excludeUnValid(){
         try {
 
-            Map<String, Object> stringObjectMap = materialCheckBiz.materialCheck(page, pageSize, hosptialName);
+            Map<String, Object> stringObjectMap = materialCheckBiz.materialCheck();
             return new ReturnResult(1,"操作完成",stringObjectMap);
         } catch (Exception e) {
             e.printStackTrace();
