@@ -1,5 +1,7 @@
 package com.siti.material.biz;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.siti.material.mapper.PrepareMapper;
 import com.siti.material.po.Prepare;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,11 @@ public class MaterialCheckBiz {
     @Resource
     PrepareMapper prepareMapper;
 
-    public Map<String,List<String>> materialCheck(String hospitalName){
-        Map<String,List<String>> map = new HashMap<>();
-        List<String> validList = new ArrayList<>();
-        List<String> notValidList = new ArrayList<>();
-
+    public Map<String,Object> materialCheck(Integer page,Integer pageSize,String hospitalName){
+        Map<String,Object> map = new HashMap<>();
+        List<Prepare> validList = new ArrayList<>();
+        List<Prepare> notValidList = new ArrayList<>();
+        PageHelper.startPage(page, pageSize);
 
         List<Prepare> list = prepareMapper.getAllUnaudit(hospitalName);
         for (Prepare entity : list){
@@ -59,18 +61,20 @@ public class MaterialCheckBiz {
                 entity.setIsDelete(0);
                 entity.setIsAudit(0);
                 prepareMapper.updateStatus(entity);
-                validList.add(entity.getName());
+                validList.add(entity);
             }
             else {
                 entity.setIsDelete(0);
                 entity.setIsAudit(-1);
                 prepareMapper.updateStatus(entity);
-                notValidList.add(entity.getName());
+                notValidList.add(entity);
             }
             System.out.println(entity.toString());
         }
-        map.put("合格组织", validList);
-        map.put("不合规组织", notValidList);
+        PageInfo<Prepare> validpageInfo = new PageInfo<>(validList);
+        PageInfo<Prepare> notValidpageInfo = new PageInfo<>(notValidList);
+        map.put("合格组织", validpageInfo);
+        map.put("不合规组织", notValidpageInfo);
         return map;
     }
 

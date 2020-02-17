@@ -1,5 +1,6 @@
 package com.siti.material.ctrl;
 
+import com.github.pagehelper.PageHelper;
 import com.siti.common.ReturnResult;
 import com.siti.material.biz.MaterialCheckBiz;
 import com.siti.material.biz.MaterialPublishBiz;
@@ -7,6 +8,7 @@ import com.siti.material.biz.MaterialPublishBiz;
 import com.siti.material.po.Prepare;
 import com.siti.material.po.SuppliesPublishCall;
 import com.siti.material.po.SuppliesPublishEntity;
+import com.siti.material.vo.PrepareVo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,11 +34,23 @@ public class PrepareController {
     @Resource
     MaterialPublishBiz materialPublishBiz;
 
-    @GetMapping("check")
-    public ReturnResult check(String hosptialName){
+    @GetMapping("getMeterialCheck")
+    public ReturnResult check(Integer page,Integer pageSize,String hosptialName){
         try {
-            Map<String,List<String>> map = materialCheckBiz.materialCheck(hosptialName);
+
+            Map<String,Object> map = materialCheckBiz.materialCheck(page,pageSize,hosptialName);
             return new ReturnResult(1,"查询结束",map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnResult(-1,"异常错误");
+        }
+    }
+
+    @GetMapping("getMaterial")
+    public ReturnResult getMaterial(Integer materialType,Integer status,String createTime,String needName){
+        try {
+            List<PrepareVo> material = materialPublishBiz.getMaterial(materialType, status, createTime, needName);
+            return new ReturnResult(1,"查询结束",material);
         } catch (Exception e) {
             e.printStackTrace();
             return new ReturnResult(-1,"异常错误");

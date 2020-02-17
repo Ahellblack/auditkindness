@@ -2,6 +2,7 @@ package com.siti.material.biz;
 
 import com.siti.material.po.*;
 import com.siti.material.mapper.*;
+import com.siti.material.vo.PrepareVo;
 import com.siti.utils.AESUtil;
 import com.siti.utils.LngLonUtil;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,8 @@ import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @program: springbootvue
@@ -309,5 +312,20 @@ public class MaterialPublishBiz {
         publishEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
 
         return publishEntity;
+    }
+
+    public List<PrepareVo> getMaterial(Integer materialType, Integer status, String createTime, String needName) {
+        List<PrepareVo> returnList = new ArrayList<>();
+        List<PrepareVo> preparelist = prepareMapper.getMaterial(materialType,status, createTime,needName);
+        Map<Integer, List<PrepareVo>> collect = preparelist.stream().collect(Collectors.groupingBy(PrepareVo::getId));
+        collect.forEach((k,v)-> {
+            returnList.addAll(v);
+        });
+        returnList.forEach(data->{
+            List<PrepareDetail> byMaterialId = prepareMapper.getByMaterialId(data.getId(), needName);
+            data.setPrepareDetails(byMaterialId);
+        });
+
+        return returnList;
     }
 }
