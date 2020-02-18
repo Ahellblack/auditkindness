@@ -2,6 +2,7 @@ package com.siti.material.ctrl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.siti.aop.annotation.Log;
 import com.siti.common.ReturnResult;
 import com.siti.material.biz.MaterialCheckBiz;
 import com.siti.material.biz.MaterialPublishBiz;
@@ -46,7 +47,7 @@ public class PrepareController {
             return new ReturnResult(-1,"异常错误");
         }
     }
-
+    @Log(operationType="update:",operationName="去除错误组织")
     @GetMapping("excludeUnValid")
     public ReturnResult excludeUnValid(){
         try {
@@ -86,6 +87,7 @@ public class PrepareController {
      * @param auditType 审核类型 1通过 -1不通过
      * */
     @GetMapping("audit")
+    @Log(operationType="update:",operationName="审核组织")
     public ReturnResult publishOne(Integer id,Integer auditType){
         try {
             Prepare data = materialPublishBiz.publishOne(id,auditType);
@@ -104,6 +106,7 @@ public class PrepareController {
      * @param id  prepareId
      * */
     @GetMapping("delete")
+    @Log(operationType="update:",operationName="更改组织is_delete = 1")
     public ReturnResult deleteOne(Integer id){
         try {
             Integer data = materialPublishBiz.deleteOne(id);
@@ -122,6 +125,7 @@ public class PrepareController {
 
      * */
     @GetMapping("update")
+    @Log(operationType="update:",operationName="修改组织信息")
     public ReturnResult update(@RequestBody Prepare prepare){
         try {
             Integer data = materialPublishBiz.update(prepare);

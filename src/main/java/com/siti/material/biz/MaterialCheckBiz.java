@@ -81,7 +81,7 @@ public class MaterialCheckBiz {
                 prepareMapper.updateStatus(entity);
                 notValidList.add(entity.getName());
             }
-            System.out.println(entity.toString());
+            /*System.out.println(entity.toString());*/
         }
         map.put("合格组织", validList);
         map.put("不合规组织", notValidList);
