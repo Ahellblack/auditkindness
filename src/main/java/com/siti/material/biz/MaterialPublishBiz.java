@@ -323,4 +323,15 @@ public class MaterialPublishBiz {
         }
         return returnData;
     }
+
+    public Integer update(Prepare prepare) {
+
+        if(prepare!=null){
+            List<PrepareDetail> prepareDetails = prepare.getPrepareDetails();
+            /*if(prepareDetails.size()!=0){
+                List<PrepareDetail> allByMaterialId = prepareDetailMapper.getAllByMaterialNeedName(prepare.getId(),);
+            }*/
+        }
+       return prepareMapper.updateByPrimaryKeySelective(prepare);
+    }
 }

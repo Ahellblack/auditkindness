@@ -35,8 +35,9 @@ public class Prepare {
 	private String descr;//备注
 	private String needsDescr;//需求物/服务备注
 	private Date updateTime;//录入时间
+
 	@Transient
-	private List<MaterialDetail> materialDetails;//需求明细
+	private List<PrepareDetail> prepareDetails;//需求明细
 	@Transient
 	private MultipartFile[] files;//文件
 	@Transient
@@ -261,12 +262,12 @@ public class Prepare {
 		return this;
 	}
 
-	public List<MaterialDetail> getMaterialDetails() {
-		return materialDetails;
+	public List<PrepareDetail> getPrepareDetails() {
+		return prepareDetails;
 	}
 
-	public Prepare setMaterialDetails(List<MaterialDetail> materialDetails) {
-		this.materialDetails = materialDetails;
+	public Prepare setPrepareDetails(List<PrepareDetail> prepareDetails) {
+		this.prepareDetails = prepareDetails;
 		return this;
 	}
 

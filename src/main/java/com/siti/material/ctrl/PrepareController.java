@@ -11,6 +11,7 @@ import com.siti.material.po.SuppliesPublishCall;
 import com.siti.material.po.SuppliesPublishEntity;
 import com.siti.material.vo.PrepareVo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -110,6 +111,24 @@ public class PrepareController {
                 return new ReturnResult(0,"删除失败，检查参数",data);
             }else{
                 return new ReturnResult(1,"删除成功",data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnResult(-1,"异常错误");
+        }
+    }
+
+    /**
+
+     * */
+    @GetMapping("update")
+    public ReturnResult update(@RequestBody Prepare prepare){
+        try {
+            Integer data = materialPublishBiz.update(prepare);
+            if(data==0){
+                return new ReturnResult(0,"修改失败，检查参数",data);
+            }else{
+                return new ReturnResult(1,"修改成功",data);
             }
         } catch (Exception e) {
             e.printStackTrace();

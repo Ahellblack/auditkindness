@@ -1,3 +1,4 @@
+/*
 package com.siti.common;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
@@ -23,12 +24,15 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+*/
 /**文件上传工具类
  * @author yaomin
- * */
+ * *//*
+
 public class UploadFileUtil {
 
-	/**
+	*/
+/**
 	 * 接收上传的文件片，以MD5值作为文件夹名，存储文件片
 	 *
 	 * @param xPath   存储文件的路径
@@ -36,7 +40,8 @@ public class UploadFileUtil {
 	 * @param chunks  总片数
 	 * @param fileMd5 上传文件的MD5值
 	 * @return 成功返回1，失败返回-1
-	 */
+	 *//*
+
 	public static int uploadFile(MultipartFile file, String xPath, int chunk, int chunks, String fileMd5) {
 		try {
 			if (!file.isEmpty()) {
@@ -54,12 +59,14 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 非断点续传，适用于小文件
 	 *
 	 * @param xPath 存储文件的路径
 	 * @return 成功返回上传文件的完整路径（包含文件名），失败返回error
-	 */
+	 *//*
+
 	public static String uploadFiles(MultipartFile file, String xPath, List<Map> parameters, String size) {
 		try {
 			String md5 = paragraphMD5(file, parameters, size);
@@ -86,14 +93,16 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 断点续传文件片全部上传完成时调用，用于合成文件
 	 *
 	 * @param xPath    存储文件的路径
 	 * @param fileName 合成文件的名称（包括后缀名）
 	 * @param fileMd5  合成文件的MD5值
 	 * @return 成功返回合成文件的完整路径（包含文件名），失败返回error
-	 */
+	 *//*
+
 	public static String mergeFile(String fileName, String fileMd5, String xPath) {
 		try {
 			File fileParent = new File(xPath + "uploadFile/" + fileMd5);
@@ -130,7 +139,8 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 断点续传时检查文件片是否上传
 	 *
 	 * @param xPath     存储文件片的路径
@@ -139,7 +149,8 @@ public class UploadFileUtil {
 	 * @param fileMd5   上传文件的MD5值
 	 * @param fileName  文件的名称（包括后缀名）
 	 * @return 已存在且完整返回true，否则返回false
-	 */
+	 *//*
+
 	public static boolean checkChunk(String xPath, Integer chunk, Integer chunkSize, String fileMd5, String fileName) {
 		File uploadFile = new File(xPath + "uploadFile/" + fileMd5 + fileName.substring(fileName.lastIndexOf(".")));
 		if (uploadFile.exists()) {
@@ -159,9 +170,11 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 判断文件是否是图片类型
-	 */
+	 *//*
+
 	public static boolean isImage(File file) {
 		Image img = null;
 		try {
@@ -175,9 +188,11 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 判断文件是否是视频类型
-	 */
+	 *//*
+
 	public static boolean isVideo(File file) {
 		String fileName = file.getName();
 		String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -190,14 +205,16 @@ public class UploadFileUtil {
 		return false;
 	}
 
-	/**
+	*/
+/**
 	 * 图片长宽压缩
 	 *
 	 * @param destFile 压缩图片的具体路径（包含文件名）
 	 * @param width    压缩图片的长度
 	 * @param height   压缩图片的高度
 	 * @throws IOException
-	 */
+	 *//*
+
 	@SuppressWarnings("restriction")
 	public static void resize(File file, String destFile, int width, int height) throws IOException {
 		Image img = ImageIO.read(file);      // 构造Image对象
@@ -209,13 +226,15 @@ public class UploadFileUtil {
 		out.close();
 	}
 
-	/**
+	*/
+/**
 	 * 图片质量压缩
 	 *
 	 * @param destFile 压缩图片的具体路径（包含文件名）
 	 * @param quality  压缩比(0,1]
 	 * @throws IOException
-	 */
+	 *//*
+
 	@SuppressWarnings("restriction")
 	public static void resizePic(File file, String destFile, float quality) throws IOException {
 		File resizedFile = new File(destFile);//压缩之后的文件
@@ -223,7 +242,8 @@ public class UploadFileUtil {
 		ImageIcon ii = new ImageIcon(file.getCanonicalPath());
 		Image i = ii.getImage();
 		Image resizedImage = i;
-	    /*int iWidth = i.getWidth(null);
+	    */
+/*int iWidth = i.getWidth(null);
         int iHeight = i.getHeight(null);
         if(iWidth < newWidth){
             newWidth = iWidth;
@@ -234,7 +254,8 @@ public class UploadFileUtil {
         } else {
             resizedImage = i.getScaledInstance((newWidth * iWidth) / iHeight,
                     newWidth, Image.SCALE_SMOOTH);
-        }*/
+        }*//*
+
 		Image temp = new ImageIcon(resizedImage).getImage();
 		BufferedImage bufferedImage = new BufferedImage(temp.getWidth(null),
 				temp.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -260,11 +281,13 @@ public class UploadFileUtil {
 		System.out.println("转换后文件大小" + resizedFile.length());
 	}
 
-	/**
+	*/
+/**
 	 * 删除文件夹及其下所有文件
 	 *
 	 * @param sPath 删除文件夹的路径
-	 */
+	 *//*
+
 	public static void deleteDirectory(String sPath) {
 		if (!sPath.endsWith(File.separator)) {
 			sPath = sPath + File.separator;
@@ -280,7 +303,8 @@ public class UploadFileUtil {
 		dirFile.delete();
 	}
 
-	/**
+	*/
+/**
 	 * 使用ffmpeg对视频截图
 	 *
 	 * @param veido_path  视频路径（包含文件名）
@@ -288,7 +312,8 @@ public class UploadFileUtil {
 	 * @param width       截图的长度
 	 * @param height      截图的高度
 	 * @return 截取成功true，否则返回false
-	 */
+	 *//*
+
 	public static boolean screenShot(String veido_path, String ffmpeg_path, int width, int height) {
 		int time = 0;
 		File file = new File(veido_path);
@@ -356,9 +381,11 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 时间转换
-	 */
+	 *//*
+
 	private static int getTimelen(String timelen) {
 		int min = 0;
 		String strs[] = timelen.split(":");
@@ -374,11 +401,13 @@ public class UploadFileUtil {
 		return min;
 	}
 
-	/**
+	*/
+/**
 	 * 获取文件的MD5值
 	 *
 	 * @throws IOException
-	 */
+	 *//*
+
 	public static String getFileMD5(MultipartFile file) throws IOException {
 		int bufferSize = 256 * 1024;
 		InputStream inputStream = null;
@@ -409,7 +438,8 @@ public class UploadFileUtil {
 		}
 	}
 
-	/**
+	*/
+/**
 	 * 获取文件的MD5值
 	 *
 	 * @param parameters 截取段比例，以键值对方式表示，例如截取方法：(0-size*0.1)+(size*0.45-size*0.55)+(size*0.9-size),
@@ -417,7 +447,8 @@ public class UploadFileUtil {
 	 * @param size       上传文件的大小
 	 * @return 上传文件的部分MD5值
 	 * @throws IOException
-	 */
+	 *//*
+
 	public static String paragraphMD5(MultipartFile file, List<Map> parameters, String size) throws IOException {
 		try {
 			List<Double> froms = new ArrayList<Double>();
@@ -473,3 +504,4 @@ public class UploadFileUtil {
 		return parameter;
 	}
 }
+*/
