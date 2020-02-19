@@ -106,7 +106,7 @@ public class PrepareController {
      * @param id  prepareId
      * */
     @GetMapping("delete")
-    @Log(operationType="update:",operationName="更改组织is_delete = 1")
+    @Log(operationType="delete:",operationName="更改组织is_delete = 1")
     public ReturnResult deleteOne(Integer id){
         try {
             Integer data = materialPublishBiz.deleteOne(id);
@@ -128,6 +128,7 @@ public class PrepareController {
     @Log(operationType="update:",operationName="修改组织信息")
     public ReturnResult update(@RequestBody Prepare prepare){
         try {
+            System.out.println("执行方法");
             Integer data = materialPublishBiz.update(prepare);
             if(data==0){
                 return new ReturnResult(0,"修改失败，检查参数",data);

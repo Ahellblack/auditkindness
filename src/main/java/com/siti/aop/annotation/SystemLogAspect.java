@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -33,7 +34,7 @@ import java.util.UUID;
  */
 
 @Aspect
-@Component
+@Service
 public class SystemLogAspect {
 
     //注入Service用于把日志保存数据库
@@ -43,7 +44,7 @@ public class SystemLogAspect {
     private static final Logger logger = LoggerFactory.getLogger(SystemLogAspect.class);
 
     //Controller层切点
-    @Pointcut("execution (* com.siti.*.ctrl.*.*(..))")
+    @Pointcut("@annotation( com.siti.aop.annotation.Log)")
     public void controllerAspect() {
     }
 
@@ -59,7 +60,7 @@ public class SystemLogAspect {
         }
     }
 
-    //配置controller环绕通知,使用在方法aspect()上注册的切入点
+    /*//配置controller环绕通知,使用在方法aspect()上注册的切入点
     @Around("controllerAspect()")
     public Object around(JoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
@@ -70,14 +71,14 @@ public class SystemLogAspect {
         }
         Object[] args = joinPoint.getArgs();
         Object result = ((ProceedingJoinPoint) joinPoint).proceed(args);
-        /*} catch (Throwable e) {
+        *//*} catch (Throwable e) {
             long end = System.currentTimeMillis();
             if(logger.isInfoEnabled()){
                 logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms with exception : " + e.getMessage());
             }
-        }*/
+        }*//*
         return result;
-    }
+    }*/
 
     /**
      * 后置通知 用于拦截Controller层记录用户的操作
@@ -95,7 +96,9 @@ public class SystemLogAspect {
         String ip = request.getRemoteAddr();
 //        String ip = "127.0.0.1";
         try {
-
+            if (logger.isInfoEnabled()) {
+                logger.info("after " + joinPoint);
+            }
             String targetName = joinPoint.getTarget().getClass().getName();
             String methodName = joinPoint.getSignature().getName();
             Object[] arguments = joinPoint.getArgs();
