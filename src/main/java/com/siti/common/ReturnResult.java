@@ -9,12 +9,12 @@ package com.siti.common;
 public class ReturnResult {
     private int result;
     private String message;
-    private Object date;
+    private Object data;
 
     public ReturnResult(int result, String message, Object object) {
         this.result = result;
         this.message = message;
-        this.date = object;
+        this.data = object;
     }
 
     public ReturnResult(int result, String message) {
@@ -38,11 +38,11 @@ public class ReturnResult {
         this.message = message;
     }
 
-    public Object getDate() {
-        return date;
+    public Object getData() {
+        return data;
     }
 
-    public void setDate(Object object) {
-        this.date = object;
+    public void setData(Object object) {
+        this.data = object;
     }
 }
