@@ -25,6 +25,9 @@ public class HospitalController {
     @Resource
     private HospitalBiz hospitalBiz;
 
+/*
+    @RequestLimit(maxCount = 10)
+*/
     @GetMapping(value = "getHospital")
     public ReturnResult selectHospital(String content, Integer hour, Integer orgType) {
         try {

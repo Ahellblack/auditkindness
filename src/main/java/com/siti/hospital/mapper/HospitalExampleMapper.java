@@ -7,7 +7,7 @@ import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
-public interface HospitalMapper extends Mapper<Hospital>{
+public interface HospitalExampleMapper extends Mapper<Hospital>{
 
 	@Select({"<script>",
         " SELECT a.id,a.province,a.city,a.org_type,a.en_name as hospitalName,a.en_address as hospitalAddress,a.en_gaode_lon as gaodeLon,a.en_gaode_lat as gaodeLat,a.type,a.is_lack,a.status,a.encourage_num,a.org_descr, "
