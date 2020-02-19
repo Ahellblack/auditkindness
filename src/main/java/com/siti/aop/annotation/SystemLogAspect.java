@@ -64,7 +64,7 @@ public class SystemLogAspect {
     @Around("controllerAspect()")
     public Object around(JoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
-        ((ProceedingJoinPoint) joinPoint).proceed();
+//        ((ProceedingJoinPoint) joinPoint).proceed();
         long end = System.currentTimeMillis();
         if (logger.isInfoEnabled()) {
             logger.info("around " + joinPoint + "\tUse time : " + (end - start) + " ms!");
