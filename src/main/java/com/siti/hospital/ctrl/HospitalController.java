@@ -10,12 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * @program: springbootvue
- * @description: 录入数据审核
- * @author: Que Zhixing
- * @create: 2020-02-11 16:57
- **/
 
 @RestController
 @RequestMapping("hospital")

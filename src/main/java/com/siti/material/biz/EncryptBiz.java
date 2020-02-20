@@ -13,12 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-10 11:41
- */
+
 @Service
 public class EncryptBiz {
     @Resource

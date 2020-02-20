@@ -5,8 +5,6 @@ package com.siti.common.constant;
  */
 public final class ConstantPath {
 
-    public final static String bikeCleanPath = "/bikeClean/";
-    public final static String headPath = "/head/";
-    public final static String feedbackPath = "/feedback/";
+    public final static String imagesPath = "C:/test/images";
 
 }

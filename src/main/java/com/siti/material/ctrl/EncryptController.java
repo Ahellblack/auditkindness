@@ -14,12 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.util.List;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-10 11:13
- **/
 
 @RestController
 @RequestMapping("encrypt")

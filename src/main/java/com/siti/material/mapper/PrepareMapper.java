@@ -74,4 +74,13 @@ public interface PrepareMapper extends Mapper<Prepare> {
             "</script>")
     List<PrepareDetail> getByMaterialId(@Param("id") Integer id,@Param("needName") String needName);
 
+
+    /**
+     * 物资表关联
+     */
+    @Select("<script>" +
+            "      SELECT DISTINCT(needs_name) FROM `prepare_detail`  "+
+            "       <if test=\" needsName!=null and needsName!=''\"> where needs_name like '%${needsName}%' </if>" +
+            "</script>")
+    List<String> getNeedsName(@Param("needsName") String needsName);
 }

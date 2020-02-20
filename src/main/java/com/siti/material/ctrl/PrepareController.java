@@ -20,12 +20,6 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @program: springbootvue
- * @description: 录入数据审核
- * @author: Que Zhixing
- * @create: 2020-02-11 16:57
- **/
 
 @RestController
 @RequestMapping("prepare")
@@ -67,7 +61,6 @@ public class PrepareController {
      * @param needName
      * @param isAudit
      * @param isDelete
-     *
      *
      * */
     @GetMapping("getMaterial")
@@ -122,18 +115,37 @@ public class PrepareController {
     }
 
     /**
-
+     * 修改组织信息
      * */
     @GetMapping("update")
     @Log(operationType="update:",operationName="修改组织信息")
     public ReturnResult update(@RequestBody Prepare prepare){
         try {
-            System.out.println("执行方法");
             Integer data = materialPublishBiz.update(prepare);
             if(data==0){
                 return new ReturnResult(0,"修改失败，检查参数",data);
             }else{
                 return new ReturnResult(1,"修改成功",data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ReturnResult(-1,"异常错误");
+        }
+    }
+
+    /**
+     * 获取物资信息
+     *
+     * @Param needsName
+     * */
+    @GetMapping("getNeedsName")
+    public ReturnResult needsName(String needsName){
+        try {
+            List<String> data = materialPublishBiz.getNeedsName(needsName);
+            if(data!=null && data.size()!=0){
+                return new ReturnResult(1,"获取成功",data);
+            }else{
+                return new ReturnResult(0,"无该物品信息",needsName);
             }
         } catch (Exception e) {
             e.printStackTrace();

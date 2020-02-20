@@ -1,11 +1,6 @@
 package com.siti.material.po;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-11 22:22
- **/
+
 public class SuppliesPublishDetail {
     private Integer id;
     private Integer publishId;

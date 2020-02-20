@@ -2,12 +2,7 @@ package com.siti.material.po;
 
 import java.sql.Timestamp;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-10 10:51
- **/
+
 public class SuppliesPublishEntity {
     private Integer id;
     private String hopistalName;

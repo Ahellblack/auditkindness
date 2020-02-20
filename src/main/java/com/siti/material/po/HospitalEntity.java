@@ -1,11 +1,6 @@
 package com.siti.material.po;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-10 10:50
- **/
+
 public class HospitalEntity {
     private Integer id;
     private String province;

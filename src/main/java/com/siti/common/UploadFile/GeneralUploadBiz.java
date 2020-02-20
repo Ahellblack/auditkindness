@@ -29,24 +29,12 @@ public class GeneralUploadBiz {
     @Resource
     private YmlConfig ymlConfig;
 
-    public Map<String, Object> uploadImgs(MultipartFile imgs, String imgType)  {//单张图片上传
+    public Map<String, Object> uploadImgs(MultipartFile imgs)  {//单张图片上传
         Map<String, Object> map = new HashMap<>();
         String uploadPath;
-        String path;
-        if ("bikeImg".equals(imgType)) {
-            uploadPath = ymlConfig.getBikeCleanPath();
-            path = ConstantPath.bikeCleanPath;
-        } else if ("headImg".equals(imgType)) {
-            uploadPath = ymlConfig.getHeadPath();
-            path = ConstantPath.headPath;
-        } else if ("feedbackImg".equals(imgType)) {
-            uploadPath = ymlConfig.getFeedbackPath();
-            path = ConstantPath.feedbackPath;
-        } else {
-            map.put("status", -1);
-            map.put("data", "文件类型值错误：应当是其一：bikeImg :单车照片；headImg :用户头像；fedbackImg :反馈照片");
-            return map;
-        }
+        /*String path = ConstantPath.imagesPath;*/
+        uploadPath = ConstantPath.imagesPath;
+
         File folder = new File(uploadPath);
         if (!folder.exists()) {
             Boolean isCreate = folder.mkdirs();
@@ -66,10 +54,10 @@ public class GeneralUploadBiz {
             e.printStackTrace();
         }
         File fromPic = new File(uploadPath + newFileName);
-        FileCopy.imgMini(path, uploadPath, newFileName, fromPic);
-        FileCopy.imgSquare(path, uploadPath, newFileName, fromPic);
+        /*FileCopy.imgMini(path, uploadPath, newFileName, fromPic);
+        FileCopy.imgSquare(path, uploadPath, newFileName, fromPic);*/
         map.put("fileName", newFileName);
-        map.put("filePath", path + newFileName + ".400x400.jpg");
+        /*map.put("filePath", path + newFileName + ".400x400.jpg");*/
         return map;
     }
 
@@ -98,17 +86,9 @@ public class GeneralUploadBiz {
     /**
      * 删除文件
      */
-    public boolean deleteFile(String imgType, String fileName) {
-        String uploadPath;
-        if ("bikeImg".equals(imgType)) {
-            uploadPath = ymlConfig.getBikeCleanPath();
-        } else if ("headImg".equals(imgType)) {
-            uploadPath = ymlConfig.getHeadPath();
-        } else if ("fedbackImg".equals(imgType)) {
-            uploadPath = ymlConfig.getFeedbackPath();
-        } else {
-            return false;
-        }
+    public boolean deleteFile(String fileName) {
+        String uploadPath = ConstantPath.imagesPath;
+
         File file = new File(uploadPath + fileName);
         return file.delete();
     }

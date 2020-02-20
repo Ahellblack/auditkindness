@@ -7,31 +7,11 @@ spring:
 
 filePath:
   invalidFileDelete: 0    # 无效文件立即删除
-  bikeClean: C:/bikeFile/bikeClean/    # 文件服务器地址
-  head: C:/bikeFile/head/    # 用户头像
-  feedback: C:/bikeFile/feedback/    # 用户反馈
-  uploadFiles: C:/bikeFile/uploadFile/    # 文件服务器地址
-  signature: C:/bikeFile/signature/    # 数字签名地址
-  fixedPicture: C:/bikeFile/fixedPicture/    # 固定资产图片地址
-  resourceLibrary: C:/bikeFile/resourceLibrary/    # 资源库地址
+  iamegs: C:/test/images/    # 文件服务器地址
+  files: C:/test/files/    # 文件服务器地址
 
 #  uploadFiles: C:/bikeFile/uploadFile/ #导入文件存放地址
 
 logback:
-  logHome: C:/bikeFile/log/
-  logName: bike
-
-APK:
-  addr: http://10.1.30.202:18181/sharebike/bicycle202.apk
-
-AK:
-  password: b413b3183893f11ebc39ed32450112ae     #高德地图Key
-  #password: jdtH6THsGb5tElwo37zdfLM5r1qEgPkp     #百度地图Key
-
-nettyServer:
-  nettyServerPort: 50046
-  ip: "127.0.0.1"
-  webSocketPort: 50048
-  workOrderServerPort: 50088
-  wocClient: "appWorkOrder"
-
+  logHome: c:/audit/log/
+  logName: auditkindness

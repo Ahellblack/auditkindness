@@ -1,11 +1,6 @@
 package com.siti.common;
 
-/**
- * @program: vehiclerepair
- * @description: 返回对象
- * @author: Que Zhixing
- * @create: 2020-01-14 22:14
- **/
+
 public class ReturnResult {
     private int result;
     private String message;

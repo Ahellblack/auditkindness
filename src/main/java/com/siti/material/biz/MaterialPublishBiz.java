@@ -15,12 +15,6 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * @program: springbootvue
- * @description: material数据发布
- * @author: Que Zhixing
- * @create: 2020-02-11 19:39
- **/
 
 @Service
 public class MaterialPublishBiz {
@@ -333,5 +327,13 @@ public class MaterialPublishBiz {
             }*/
         }
        return prepareMapper.updateByPrimaryKeySelective(prepare);
+    }
+
+    public List<String> getNeedsName(String needsName) {
+        try {
+            return prepareMapper.getNeedsName(needsName);
+        }catch (Exception e){
+            return new ArrayList<>();
+        }
     }
 }

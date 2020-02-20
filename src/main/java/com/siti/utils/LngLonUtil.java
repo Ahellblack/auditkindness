@@ -1,11 +1,6 @@
 package com.siti.utils;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-11 23:34
- **/
+
 public class LngLonUtil {
 
     public static double pi = 3.1415926535897932384626;

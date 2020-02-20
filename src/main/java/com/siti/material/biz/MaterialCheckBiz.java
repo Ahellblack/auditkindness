@@ -12,12 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @program: springbootvue
- * @description:
- * @author: Que Zhixing
- * @create: 2020-02-11 17:06
- **/
 
 @Service
 public class MaterialCheckBiz {

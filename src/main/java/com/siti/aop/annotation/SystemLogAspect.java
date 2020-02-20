@@ -4,6 +4,7 @@ import com.siti.aop.mapper.SysLogMapper;
 import com.siti.aop.po.SysLog;
 import com.siti.security.LoginUserInfo;
 import com.siti.security.RestAuthenticationSuccessHandler;
+import com.siti.utils.CustomSystemUtil;
 import com.siti.utils.JsonUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,25 +21,22 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
-import java.sql.Array;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.UUID;
 
 
-/**
- * @author 杨建
- * @version 创建时间：2015-10-19 下午4:29:05
- * @E-mail: email
- * @desc 切点类
- */
 
 @Aspect
 @Service
 public class SystemLogAspect {
 
     //注入Service用于把日志保存数据库
-    @Resource  //这里我用resource注解，一般用的是@Autowired，他们的区别如有时间我会在后面的博客中来写
+    @Resource
     private SysLogMapper sysLogMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(SystemLogAspect.class);
@@ -90,11 +88,11 @@ public class SystemLogAspect {
         //读取session中的用户
         LoginUserInfo user = (LoginUserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        //HttpSession session = request.getSession();
-        String ipAddress = getIpAddress(request);
+
         //请求的IP
-        String ip = request.getRemoteAddr();
-//        String ip = "127.0.0.1";
+        String ipAddress = CustomSystemUtil.INTRANET_IP;
+        /*String ip = request.getRemoteAddr();*/
+        //String ip = "127.0.0.1";
         try {
             if (logger.isInfoEnabled()) {
                 logger.info("after " + joinPoint);
@@ -121,14 +119,14 @@ public class SystemLogAspect {
             System.out.println("请求方法:" + (joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
             System.out.println("方法描述:" + operationName);
             System.out.println("请求人:" + user.getRealName());
-            System.out.println("请求IP:" + ip);
+            System.out.println("请求IP:" + ipAddress);
             //*========数据库日志=========*//
             SysLog log = new SysLog();
             log.setId(UUID.randomUUID().toString());
             log.setDescription(operationName);
             log.setMethod((joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()") + "." + operationType);
             log.setLogType((long) 0);
-            log.setRequestIp(ip);
+            log.setRequestIp(ipAddress);
             log.setExceptionCode(null);
             log.setExceptionDetail(null);
             log.setParams(Arrays.toString(joinPoint.getArgs()));
@@ -226,25 +224,5 @@ public class SystemLogAspect {
         logger.error("异常方法:{}异常代码:{}异常信息:{}参数:{}", joinPoint.getTarget().getClass().getName() + joinPoint.getSignature().getName(), e.getClass().getName(), e.getMessage(), params);
 
     }
-    public String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
-
 
 }

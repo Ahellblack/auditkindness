@@ -1,6 +1,7 @@
 package com.siti.system.biz;
 
 
+import com.siti.common.constant.ConstantPath;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.siti.config.YmlConfig;
@@ -59,12 +60,11 @@ public class SysInfoBiz {
             logList = getLogText(version, terminal);
 
         } else if ("PC".equals(terminal)) {
-            version = ymlConfig.getPcversion();
+            version = ConstantPath.imagesPath;
             logList = getLogText(version, terminal);
         }
         map.put("version", version);
         map.put("list", logList);
-        map.put("apk", ymlConfig.getApkAddr());
         map.put("status", 0);
         return map;
     }
