@@ -1,6 +1,7 @@
 package com.siti.hospital.mapper;
 
 import com.siti.hospital.po.Hospital;
+import com.siti.hospital.vo.HospitalVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
@@ -16,11 +17,12 @@ public interface HospitalExampleMapper extends Mapper<Hospital>{
         + "left join (SELECT publish_id,GROUP_CONCAT(DISTINCT needs_name) as needs_name,GROUP_CONCAT(CONCAT(needs_name,':',descr)) as needsDescr FROM supplies_publish_detail group by publish_id) c on b.id=c.publish_id "
         + "left join (SELECT publish_id,GROUP_CONCAT(en_people) as en_people,GROUP_CONCAT(en_tel_x) as en_tel_x FROM supplies_publish_call group by publish_id) d on b.id=d.publish_id where 1=1 "
         + "<if test=\"content!=null\"> and (a.hospital_name like concat(concat('%',#{content}),'%') or a.province like concat(concat('%',#{content}),'%') or a.city like concat(concat('%',#{content}),'%') or c.needs_name like concat(concat('%',#{content}),'%'))</if> "
-        + "<if test=\"hour!=null\"> and b.create_time >=(now() - interval #{hour} hour)</if>"
+        + "<if test=\"startTime!=null and startTime!=''\"> and b.create_time &gt; = #{startTime}</if>"
+        + "<if test=\"endTime!=null and endTime!=''\"> and and b.create_time &lt; = #{endTime}</if>"
         + "<if test=\"orgType!=null\"> and a.org_type=#{orgType}</if>"
         + "group by a.hospital_name order by b.create_time desc"+
         "</script>"})
-	List<Hospital> selectHospital(@Param("content") String content, @Param("hour") Integer hour, @Param("orgType") Integer orgType);
+	List<HospitalVo> selectHospital(@Param("content") String content, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("orgType") Integer orgType);
 
 
 }

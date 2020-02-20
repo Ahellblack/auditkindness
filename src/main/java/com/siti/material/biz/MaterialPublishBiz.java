@@ -293,7 +293,7 @@ public class MaterialPublishBiz {
         List<PrepareVo> returnList = preparelist.stream()
                 .collect(Collectors.collectingAndThen(Collectors.toCollection(
                         // 利用 TreeSet 的排序去重构造函数来达到去重元素的目的
-                        // 根据firstName去重
+                        // 根据id去重
                         () -> new TreeSet<>(Comparator.comparing(PrepareVo::getId))), ArrayList::new));
 
         returnList.forEach(data -> {
