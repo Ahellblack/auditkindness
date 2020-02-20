@@ -8,9 +8,8 @@ spring:
 
 filePath:
   invalidFileDelete: 0    # 无效文件立即删除
-  iamegs: C:/test/images/    # 文件服务器地址
+  images: C:/test/images/    # 文件服务器地址
   files: C:/test/files/    # 文件服务器地址
-
 #  uploadFiles: C:/bikeFile/uploadFile/ #导入文件存放地址
 
 logback:

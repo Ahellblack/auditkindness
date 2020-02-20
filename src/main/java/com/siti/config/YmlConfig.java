@@ -20,12 +20,12 @@ public class YmlConfig extends WebMvcConfigurerAdapter {
      */
     @Value("${filePath.files}")
     private String filepath;
-    /**
-     * 用户头像
-     */
-    @Value("${filePath.head}")
-    private String headPath;
 
+    /**
+     * 文件服务器地址
+     */
+    @Value("${filePath.images}")
+    private String imagepath;
     /**
      * 版本号
      */
