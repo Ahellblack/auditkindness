@@ -24,7 +24,7 @@ public interface DonateMapper extends Mapper<Donate> {
             "<if test = \"headline!=null and headline!=''\"> and headline like '%${headline}' </if>" +
             "<if test = \"startDate!=null and startDate!='' and endDate!=null and endDate!=''\">" +
             " and pubDate &gt;= #{startDate} and pubDate &lt;= #{endDate} </if>" +
-            "<if test = \"isTop!=null and isTop!=''\"> and is_top=#{isTop} </if>" +
+            "<if test = \"isTop!=null \"> and is_top=#{isTop} </if>" +
             " ORDER BY is_top DESC,pubdate DESC", "</script>"})
     List<DonateVo> getDonateInfo(@Param("headline") String headline, @Param("startDate") String startDate,
                                  @Param("endDate") String endDate, @Param("isTop") Integer isTop);
