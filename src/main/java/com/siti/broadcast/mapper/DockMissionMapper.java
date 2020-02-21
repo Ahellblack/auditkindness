@@ -18,4 +18,13 @@ public interface DockMissionMapper {
     List<DockingMissionVo> getMissionList(@Param("status") Integer status, @Param("title") String title,
                                           @Param("startDate") String startDate, @Param("endDate") String endDate,
                                           @Param("tableName") String tableName);
+
+
+
+
+    @Select({"<script>", "SELECT title  " +
+            " FROM ${tableName} WHERE 1=1" +
+            "<if test=\"title!=null\"> and title like '%${title}%' </if>" +
+            " ORDER BY update_time DESC", "</script>"})
+    List<String> getTitle(@Param("title") String title,@Param("tableName")String tableName);
 }

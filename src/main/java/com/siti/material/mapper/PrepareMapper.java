@@ -56,7 +56,8 @@ public interface PrepareMapper extends Mapper<Prepare> {
             "       <if test=\" materialType!=null and materialType!=''\">and  p.material_type = #{materialType}</if>" +
             "       <if test=\" status!=null and status!=''\"> and p.status = #{status} </if>" +
             "       <if test=\" createTime!=null and createTime!=''\"> and p.create_time like '%${createTime}%'</if>" +
-            "       <if test=\" needName!=null and needName!=''\"> and needs_name like '%${needName}%' </if>" +
+            "       <if test=\" needName!=null and needName!=''\"> and needs_name like '%${needName}%' </if> " +
+            "       order by p.create_time desc " +
             "</script>")
      /* @Results(id = "progItem", value = {
             @Result(property = "id", column = "id"),

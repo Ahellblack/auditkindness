@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping("dock")
@@ -34,6 +35,18 @@ public class DockMissionCtrl {
             PageInfo<DockingMissionVo> pageInfo = dockMissionBiz.getMissionList(status, title, startDate, endDate, tab, page, pageSize);
             response.setHeader("Access-Control-Allow-Origin", "*");
             return new ReturnResult(1, "查询成功", pageInfo);
+        } catch (Exception e) {
+            return new ReturnResult(-1, "查询失败");
+        }
+    }
+
+    @GetMapping(value = "getTitle")
+    public ReturnResult getDonateInfo(@RequestParam(name = "title", required = false) String title,
+                                      String tab) {
+        try {
+            List<String> titleName= dockMissionBiz.getTitleListByTab(title, tab);
+
+            return new ReturnResult(1, "查询成功", titleName);
         } catch (Exception e) {
             return new ReturnResult(-1, "查询失败");
         }

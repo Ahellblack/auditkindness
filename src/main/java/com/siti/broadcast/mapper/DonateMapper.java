@@ -36,4 +36,8 @@ public interface DonateMapper extends Mapper<Donate> {
 
     @Delete({"delete from `donate` where id=#{id}"})
     void deleteById(@Param("id") Integer id);
+
+    @Select({"<script>", "SELECT headline FROM donate " +
+            "<if test = \"headline!=null and headline!=''\"> where headline like '%${headline}%' </if></script>"})
+    List<String> getHeadline(@Param("headline") String headline);
 }

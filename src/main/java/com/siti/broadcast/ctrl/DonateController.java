@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("donate")
@@ -76,4 +77,21 @@ public class DonateController {
             return new ReturnResult(-1, "删除失败");
         }
     }
+
+    /*-----------------------------------------------------------------------*/
+
+    /**
+     * 标题下拉框*/
+    @GetMapping("getHeadline")
+    public ReturnResult getHeadline(String headline) {
+        try {
+            List<String> list = donateBiz.getHeadline(headline);
+            return new ReturnResult(1, "查询成功",list);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            return new ReturnResult(-1, "查询失败");
+        }
+    }
+
+
 }

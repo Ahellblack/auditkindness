@@ -41,4 +41,12 @@ public class DonateBiz {
     public void delete(Integer id) {
         donateMapper.deleteById(id);
     }
+
+
+    /**
+     * 标题查询
+     * */
+    public List<String> getHeadline(String headline) {
+        return donateMapper.getHeadline(headline);
+    }
 }

@@ -52,4 +52,30 @@ public class DockMissionBiz {
         PageInfo<DockingMissionVo> pageInfo = new PageInfo<>(info);
         return pageInfo;
     }
+
+    public List<String> getTitleListByTab(String title,String tab) {
+
+        String tableName = null;
+        if (tab != null && !"".equals(tab)) {
+            switch (tab) {
+                case "fund" :
+                    tableName = "fund_info";
+                    break;
+                case "purchase" :
+                    tableName = "purchase_demand";
+                    break;
+                case "supply" :
+                    tableName = "supply_info";
+                    break;
+                default:
+                    break;
+            }
+        }
+        List<String> list = new ArrayList<>();
+        if (tableName != null ) {
+            list = dockMissionMapper.getTitle(title,tableName);
+        }
+
+        return list;
+    }
 }

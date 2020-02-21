@@ -288,18 +288,18 @@ public class MaterialPublishBiz {
             isDelete =0;
         }
 
-        PageHelper.startPage(page, pageSize);
         List<PrepareVo> preparelist = prepareMapper.getMaterial(materialType, status, createTime,needName,isAudit,isDelete);
         List<PrepareVo> returnList = preparelist.stream()
                 .collect(Collectors.collectingAndThen(Collectors.toCollection(
                         // 利用 TreeSet 的排序去重构造函数来达到去重元素的目的
-                        // 根据id去重
+                        // 根据去重
                         () -> new TreeSet<>(Comparator.comparing(PrepareVo::getId))), ArrayList::new));
 
         returnList.forEach(data -> {
             List<PrepareDetail> byMaterialId = prepareMapper.getByMaterialId(data.getId(), needName);
             data.setPrepareDetails(byMaterialId);
         });
+        PageHelper.startPage(page, pageSize);
         PageInfo<PrepareVo> pageInfo = new PageInfo<>(returnList);
         return pageInfo;
     }
